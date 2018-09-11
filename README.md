@@ -3,3 +3,8 @@
   
 # Property file
   New files can be added under src/resources/AppMsg*.properties
+
+# Class Diagram
+
+   ![Class Diagram](ClassDiagram.png)
+   
