@@ -52,25 +52,25 @@ public class CountingTest extends BaseTest {
 
     @Test
     public void should_Verify_WalkableCount() {
-        int count = this.countAnimals.walkableCount(livingThings);
+        long count = this.countAnimals.walkableCount(livingThings);
         assertEquals(8, count);
     }
 
     @Test
     public void should_Verify_FlyableCount() {
-        int count = this.countAnimals.flyableCount(livingThings);
+        long count = this.countAnimals.flyableCount(livingThings);
         assertEquals(5, count);
     }
 
     @Test
     public void should_Verify_SingableCount() {
-        int count = this.countAnimals.singableCount(livingThings);
+        long count = this.countAnimals.singableCount(livingThings);
         assertEquals(8, count);
     }
 
     @Test
     public void should_Verify_SwimmableCount() {
-        int count = this.countAnimals.swimmableCount(livingThings);
+        long count = this.countAnimals.swimmableCount(livingThings);
         assertEquals(5, count);
     }
 }

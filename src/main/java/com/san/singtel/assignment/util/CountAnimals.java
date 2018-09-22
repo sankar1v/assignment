@@ -1,63 +1,52 @@
 package com.san.singtel.assignment.util;
 
+import com.san.singtel.assignment.behaviour.Flyable;
+import com.san.singtel.assignment.behaviour.Singable;
+import com.san.singtel.assignment.behaviour.Swimmable;
+import com.san.singtel.assignment.behaviour.Walkable;
 import com.san.singtel.assignment.behaviour.fly.CanFly;
 import com.san.singtel.assignment.behaviour.sing.CanSing;
 import com.san.singtel.assignment.behaviour.swim.CanSwim;
 import com.san.singtel.assignment.behaviour.walk.CanWalk;
 import com.san.singtel.assignment.model.LivingThing;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Created by sankarvinnakota on 11/09/18.
  */
 public class CountAnimals {
 
-    public int walkableCount(List<LivingThing> livingThings) {
-        int count = 0;
-        if (Optional.ofNullable(livingThings).map(List::size).orElse(0) == 0) {
-            return count;
-        }
-
-        for (LivingThing livingThing : livingThings) {
-            if (livingThing.getWalkable() != null && livingThing.getWalkable() instanceof CanWalk) {
-                count++;
-            }
-        }
-        return count;
+    public long walkableCount(List<LivingThing> livingThings) {
+        Function<LivingThing, Walkable> livingThingToWalkable = LivingThing::getWalkable;
+        return getCount(livingThings, livingThingToWalkable, walkable -> walkable instanceof CanWalk);
     }
 
-    public int flyableCount(List<LivingThing> livingThings) {
-        int count = 0;
-        for (LivingThing livingThing : livingThings) {
-            if (livingThing.getFlyable() != null
-                    && livingThing.getFlyable() instanceof CanFly) {
-                count++;
-            }
-        }
-        return count;
+    public long flyableCount(List<LivingThing> livingThings) {
+        Function<LivingThing, Flyable> livingThingToFlyable = LivingThing::getFlyable;
+        return getCount(livingThings, livingThingToFlyable, flyable -> flyable instanceof CanFly);
     }
 
-    public int singableCount(List<LivingThing> livingThings) {
-        int count = 0;
-        for (LivingThing livingThing : livingThings) {
-            if (livingThing.getSingable() != null
-                    && livingThing.getSingable() instanceof CanSing) {
-                count++;
-            }
-        }
-        return count;
+    public long singableCount(List<LivingThing> livingThings) {
+        Function<LivingThing, Singable> livingThingToSingable = LivingThing::getSingable;
+        return getCount(livingThings, livingThingToSingable, singable -> singable instanceof CanSing);
     }
 
-    public int swimmableCount(List<LivingThing> livingThings) {
-        int count = 0;
-        for (LivingThing livingThing : livingThings) {
-            if (livingThing.getSwimmable() != null
-                    && livingThing.getSwimmable() instanceof CanSwim) {
-                count++;
-            }
-        }
-        return count;
+    public long swimmableCount(List<LivingThing> livingThings) {
+        Function<LivingThing, Swimmable> livingThingToSwimmable = LivingThing::getSwimmable;
+        return getCount(livingThings, livingThingToSwimmable, swimmable -> swimmable instanceof CanSwim);
     }
+
+    private long getCount(List<LivingThing> livingThings, Function function, Predicate predicate) {
+        return Optional.ofNullable(livingThings).map(Collection::parallelStream).orElseGet(Stream::empty)
+                .map(function)
+                .filter(predicate)
+                .count();
+    }
+
 }
